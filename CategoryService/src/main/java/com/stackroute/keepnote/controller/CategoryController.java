@@ -62,12 +62,12 @@ public class CategoryController {
 			category.setCategoryCreationDate(new Date());
 			Category categoryCreated = categoryService.createCategory(category);
 			if (categoryCreated != null) {
-				return new ResponseEntity<>(HttpStatus.CREATED);
+				return new ResponseEntity<>(category, HttpStatus.CREATED);
 			}
 		} catch (CategoryNotCreatedException e) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity<Category>(category, HttpStatus.CREATED);
+		return new ResponseEntity<>(category, HttpStatus.CREATED);
 	}
 
 	/*
@@ -91,7 +91,7 @@ public class CategoryController {
 		} catch (CategoryDoesNoteExistsException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
 	}
 
 	/*
@@ -109,7 +109,7 @@ public class CategoryController {
 		category.setCategoryCreationDate(new Date());
 		Category updated = categoryService.updateCategory(category, id);
 		if (updated != null) {
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(category, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
@@ -127,10 +127,11 @@ public class CategoryController {
 	 */
 	@GetMapping("/api/v1/category/{id}")
 	public ResponseEntity<?> getCategoryById(@PathVariable("id") String id) {
+		Category category = null;
 		try {
-			Category category = categoryService.getCategoryById(id);
+			category = categoryService.getCategoryById(id);
 			if (category != null) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(category, HttpStatus.OK);
 			}
 		} catch (CategoryNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

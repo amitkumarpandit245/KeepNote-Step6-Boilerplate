@@ -1,9 +1,9 @@
 package com.stackroute.keepnote.service;
 
+import java.util.List;
+
 import com.stackroute.keepnote.exception.NoteNotFoundExeption;
 import com.stackroute.keepnote.model.Note;
-
-import java.util.List;
 
 
 public interface NoteService {

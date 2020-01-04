@@ -1,6 +1,7 @@
 package com.stackroute.keepnote.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,7 +57,7 @@ public class NoteController {
 		try {
 			note.setNoteCreationDate(new Date());
 			if (noteService.createNote(note)) {
-				return new ResponseEntity<>(HttpStatus.CREATED);
+				return new ResponseEntity<>(note,HttpStatus.CREATED);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -78,7 +79,7 @@ public class NoteController {
 	public ResponseEntity<?> deleteNote(@PathVariable("userId") String userId, @PathVariable("id") int id) {
 		try {
 			if (noteService.deleteNote(userId, id)) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>("Note Deleted Successfully",HttpStatus.OK);
 			}
 
 		} catch (Exception e) {
@@ -91,7 +92,7 @@ public class NoteController {
 	public ResponseEntity<?> deleteAllNotes(@PathVariable("userId") String userId) {
 		try {
 			if (noteService.deleteAllNotes(userId)) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>("Deleted all note with mentioned User Id",HttpStatus.OK);
 			}
 
 		} catch (Exception e) {
@@ -117,7 +118,7 @@ public class NoteController {
 			@PathVariable("noteId") int noteId) {
 		try {
 			if (noteService.updateNote(note, noteId, userId) != null) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(note,HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -135,8 +136,8 @@ public class NoteController {
 	 */
 	@GetMapping("/api/v1/note/{userId}")
 	public ResponseEntity<?> getAllNotedById(@PathVariable("userId") String userId) {
-		noteService.getAllNoteByUserId(userId);
-		return new ResponseEntity<>(HttpStatus.OK);
+		List<Note> notes=noteService.getAllNoteByUserId(userId);
+		return new ResponseEntity<>(notes,HttpStatus.OK);
 	}
 
 	/*
@@ -151,11 +152,12 @@ public class NoteController {
 	 */
 	@GetMapping("/api/v1/note/{userId}/{noteId}")
 	public ResponseEntity<?> getNoteByUserId(@PathVariable String userId, @PathVariable("noteId") int noteId) {
+		Note note=null;
 		try {
-			noteService.getNoteByNoteId(userId, noteId);
+			note=noteService.getNoteByNoteId(userId, noteId);
 		} catch (NoteNotFoundExeption e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(note,HttpStatus.OK);
 	}
 }

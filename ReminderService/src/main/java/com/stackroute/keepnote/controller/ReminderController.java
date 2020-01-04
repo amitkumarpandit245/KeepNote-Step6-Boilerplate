@@ -69,12 +69,12 @@ public class ReminderController {
 			reminder.setReminderCreationDate(new Date());
 			Reminder reminderCreated = reminderService.createReminder(reminder);
 			if (reminderCreated != null) {
-				return new ResponseEntity<>(HttpStatus.CREATED);
+				return new ResponseEntity<>(reminder,HttpStatus.CREATED);
 			}
 		} catch (ReminderNotCreatedException e) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity<Reminder>(reminder, HttpStatus.CREATED);
+		return new ResponseEntity<>(reminder, HttpStatus.CREATED);
 	}
 
 	/*
@@ -92,7 +92,7 @@ public class ReminderController {
 	public ResponseEntity<?> deleteReminder(@PathVariable("id") String id) {
 		try {
 			if (reminderService.deleteReminder(id)) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<String>("Deleted Succcessfully",HttpStatus.OK);
 			}
 
 		} catch (ReminderNotFoundException e) {
@@ -114,16 +114,17 @@ public class ReminderController {
 	 */
 	@PutMapping("/api/v1/reminder/{id}")
 	public ResponseEntity<?> updateReminder(@RequestBody Reminder reminder, @PathVariable("id") String id) {
+		Reminder updated=null;
 		try {
 			reminder.setReminderCreationDate(new Date());
-			Reminder updated = reminderService.updateReminder(reminder, id);
+			updated = reminderService.updateReminder(reminder, id);
 			if (updated != null) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(updated,HttpStatus.OK);
 			}
 		} catch (ReminderNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Reminder>(reminder, HttpStatus.OK);
+		return new ResponseEntity<>(updated, HttpStatus.OK);
 	}
 
 	/*
@@ -137,10 +138,11 @@ public class ReminderController {
 	 */
 	@GetMapping("/api/v1/reminder/{id}")
 	public ResponseEntity<?> getReminderById(@PathVariable("id") String id) {
+		Reminder reminder=null;
 		try {
-			Reminder reminder = reminderService.getReminderById(id);
+			reminder = reminderService.getReminderById(id);
 			if (reminder != null) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(reminder,HttpStatus.OK);
 			}
 		} catch (ReminderNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

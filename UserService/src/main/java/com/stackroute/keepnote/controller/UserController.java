@@ -61,7 +61,7 @@ public class UserController {
 			user.setUserAddedDate(new Date());
 			User userCreated = userService.registerUser(user);
 			if (userCreated != null) {
-				return new ResponseEntity<>(HttpStatus.CREATED);
+				return new ResponseEntity<User>(user,HttpStatus.CREATED);
 			}
 		} catch (UserAlreadyExistsException e) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -85,7 +85,7 @@ public class UserController {
 			user.setUserAddedDate(new Date());
 			User updated = userService.updateUser(id, user);
 			if (updated != null) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<User>(user,HttpStatus.OK);
 			}
 		} catch (UserNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -125,14 +125,15 @@ public class UserController {
 	 */
 	@GetMapping("/api/v1/user/{id}")
 	public ResponseEntity<?> showUserDetails(@PathVariable("id") String uid) {
+		User user =null;
 		try {
-			User user = userService.getUserById(uid);
+			 user=userService.getUserById(uid);
 			if (user != null) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(user,HttpStatus.OK);
 			}
 		} catch (UserNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(user,HttpStatus.OK);
 	}
 }
