@@ -1,5 +1,5 @@
 FROM java:8-jre
-WORKDIR usr/src
+WORKDIR /usr/src
 ENV MONGO_DATABASE=keepnote6
 ADD ./target/UserService-0.0.1-SNAPSHOT.jar /usr/src/UserService-0.0.1-SNAPSHOT.jar
 EXPOSE 8081
